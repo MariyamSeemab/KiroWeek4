@@ -1,5 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import './styles/retro.css';
+import { API_CONFIG } from './config/api';
+
+// API Base URL from environment variable or fallback to localhost
+const API_BASE_URL = API_CONFIG.BASE_URL;
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -59,7 +63,7 @@ function App() {
 
   const checkBackendConnection = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/health');
+      const response = await fetch(`${API_BASE_URL}/api/health`);
       if (response.ok) {
         setBackendConnected(true);
         console.log('✅ Backend connected');
@@ -75,7 +79,7 @@ function App() {
 
   const loadProviders = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/ai/providers');
+      const response = await fetch(`${API_BASE_URL}/api/ai/providers`);
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
@@ -276,7 +280,7 @@ function App() {
         console.log(`  ${key}:`, value instanceof File ? `File(${value.name}, ${value.size} bytes)` : value);
       }
       
-      const response = await fetch('http://localhost:3001/api/ai/generate', {
+      const response = await fetch(`${API_BASE_URL}/api/ai/generate`, {
         method: 'POST',
         body: formData // No Content-Type header - let browser set it for FormData
       });
@@ -333,7 +337,7 @@ function App() {
       attempts++;
       
       try {
-        const statusResponse = await fetch(`http://localhost:3001/api/ai/status/${generationId}`);
+        const statusResponse = await fetch(`${API_BASE_URL}/api/ai/status/${generationId}`);
         
         if (statusResponse.ok) {
           const statusData = await statusResponse.json();
@@ -345,7 +349,7 @@ function App() {
               clearInterval(pollInterval);
               
               // Download the generated image
-              const imageResponse = await fetch(`http://localhost:3001/api/ai/result/${generationId}`);
+              const imageResponse = await fetch(`${API_BASE_URL}/api/ai/result/${generationId}`);
               
               if (imageResponse.ok) {
                 const imageBlob = await imageResponse.blob();

@@ -1,0 +1,20 @@
+services:
+  # Backend API Service
+  - type: web
+    name: retro-ai-paint-backend
+    runtime: node
+    region: oregon
+    plan: free
+    rootDir: retro-ai-paint/backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3001
+      - key: FRONTEND_URL
+        sync: false
+      - key: CORS_ORIGIN
+        sync: false
+    healthCheckPath: /api/health

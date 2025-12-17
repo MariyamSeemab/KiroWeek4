@@ -1,6 +1,9 @@
 [build]
 builder = "NIXPACKS"
 
+[build.nixpacksConfig]
+packages = ["python3", "cairo", "pango", "libjpeg", "giflib", "librsvg"]
+
 [deploy]
 startCommand = "npm start"
 healthcheckPath = "/api/health"

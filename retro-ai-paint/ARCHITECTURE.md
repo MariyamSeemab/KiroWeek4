@@ -7,54 +7,40 @@ Retro AI Paint is a modern web application that combines the nostalgic MS Paint 
 
 ```mermaid
 graph TB
-    subgraph "Frontend (React + TypeScript)"
-        UI[🎨 Retro Paint UI]
-        Canvas[📐 HTML5 Canvas]
-        Timer[⏱️ Timer Panel]
-        Dialog[💬 AI Dialog]
+    subgraph Frontend
+        A[Retro Paint UI]
+        B[HTML5 Canvas]
+        C[Timer Panel]
+        D[AI Dialog]
     end
     
-    subgraph "Backend (Node.js + Express)"
-        API[🔌 REST API]
-        AIManager[🤖 AI Provider Manager]
-        Generation[⚙️ Generation Service]
-        Queue[📋 Queue Manager]
+    subgraph Backend
+        E[REST API]
+        F[AI Provider Manager]
+        G[Generation Service]
+        H[Queue Manager]
     end
     
-    subgraph "AI Providers (FREE)"
-        Pollinations[🌸 Pollinations AI]
-        Craiyon[🎭 Craiyon]
-        DeepAI[🧠 DeepAI]
-        Mock[🎪 Intelligent Mock]
+    subgraph Providers
+        I[Pollinations AI]
+        J[Craiyon]
+        K[DeepAI]
+        L[Mock Generator]
     end
     
-    subgraph "Storage & Cache"
-        Memory[💾 In-Memory Cache]
-        Files[📁 Generated Images]
-    end
+    A --> E
+    B --> E
+    C --> A
+    D --> E
     
-    UI --> API
-    Canvas --> API
-    Timer --> UI
-    Dialog --> API
+    E --> F
+    F --> G
+    G --> H
     
-    API --> AIManager
-    AIManager --> Generation
-    Generation --> Queue
-    
-    AIManager --> Pollinations
-    AIManager --> Craiyon
-    AIManager --> DeepAI
-    AIManager --> Mock
-    
-    Generation --> Memory
-    Generation --> Files
-    
-    style UI fill:#e1f5fe
-    style API fill:#f3e5f5
-    style AIManager fill:#e8f5e8
-    style Pollinations fill:#fff3e0
-    style Memory fill:#fce4ec
+    F --> I
+    F --> J
+    F --> K
+    F --> L
 ```
 
 ## 🔄 Data Flow Architecture
@@ -94,169 +80,79 @@ sequenceDiagram
 ## 🏛️ Component Architecture
 
 ```mermaid
-graph LR
-    subgraph "Frontend Components"
-        App[App-ai-fixed.tsx]
-        Canvas[RetroCanvas]
-        Tools[ToolPalette]
-        Colors[ColorPalette]
-        Menu[MenuSystem]
-        AIDialog[AIDialog]
-        Timer[Timer Panel]
-    end
+graph TD
+    A[App Component] --> B[Canvas]
+    A --> C[Tools]
+    A --> D[Colors]
+    A --> E[Menu]
+    A --> F[AI Dialog]
+    A --> G[Timer Panel]
     
-    subgraph "Backend Services"
-        Server[Express Server]
-        Routes[API Routes]
-        AIManager[AI Provider Manager]
-        GenService[Generation Service]
-        Queue[Queue Manager]
-        Cache[Cache Service]
-    end
+    A --> H[Express Server]
+    H --> I[API Routes]
+    I --> J[AI Manager]
+    J --> K[Generation Service]
+    K --> L[Queue Manager]
     
-    subgraph "AI Integration"
-        Providers[Provider Manager]
-        Pollinations[Pollinations API]
-        Fallback[Fallback Services]
-        Mock[Mock Generator]
-    end
-    
-    App --> Canvas
-    App --> Tools
-    App --> Colors
-    App --> Menu
-    App --> AIDialog
-    App --> Timer
-    
-    App --> Server
-    Server --> Routes
-    Routes --> AIManager
-    AIManager --> GenService
-    GenService --> Queue
-    GenService --> Cache
-    
-    AIManager --> Providers
-    Providers --> Pollinations
-    Providers --> Fallback
-    Providers --> Mock
+    J --> M[Pollinations]
+    J --> N[Craiyon]
+    J --> O[DeepAI]
+    J --> P[Mock AI]
 ```
 
 ## 🔧 Technical Stack
 
 ```mermaid
 graph TD
-    subgraph "Frontend Stack"
-        React[React 18]
-        TS[TypeScript]
-        Vite[Vite Build Tool]
-        CSS[CSS3 + Retro Styling]
-    end
+    A[React 18] --> B[TypeScript]
+    B --> C[Vite]
+    C --> D[CSS3]
     
-    subgraph "Backend Stack"
-        Node[Node.js]
-        Express[Express.js]
-        Canvas[node-canvas]
-        Fetch[node-fetch]
-    end
+    E[Node.js] --> F[Express.js]
+    F --> G[node-canvas]
+    G --> H[node-fetch]
     
-    subgraph "AI Integration"
-        Free[FREE AI APIs]
-        HTTP[HTTP Clients]
-        Buffer[Image Processing]
-    end
+    I[FREE AI APIs] --> J[HTTP Clients]
+    J --> K[Image Processing]
     
-    subgraph "Development Tools"
-        ESLint[ESLint]
-        Prettier[Prettier]
-        Jest[Jest Testing]
-        Git[Git Version Control]
-    end
-    
-    React --> TS
-    TS --> Vite
-    Vite --> CSS
-    
-    Node --> Express
-    Express --> Canvas
-    Canvas --> Fetch
-    
-    Free --> HTTP
-    HTTP --> Buffer
-    
-    ESLint --> Prettier
-    Prettier --> Jest
-    Jest --> Git
+    L[ESLint] --> M[Prettier]
+    M --> N[Jest]
+    N --> O[Git]
 ```
 
 ## 🌐 API Architecture
 
 ```mermaid
-graph TB
-    subgraph "API Endpoints"
-        Health[GET /api/health]
-        Providers[GET /api/ai/providers]
-        Generate[POST /api/ai/generate]
-        Status[GET /api/ai/status/:id]
-        Result[GET /api/ai/result/:id]
-    end
+graph TD
+    A[GET /api/health] --> E[Input Validation]
+    B[GET /api/ai/providers] --> E
+    C[POST /api/ai/generate] --> E
+    D[GET /api/ai/status] --> E
     
-    subgraph "Request Processing"
-        Validation[Input Validation]
-        Queue[Request Queue]
-        Processing[AI Processing]
-        Storage[Result Storage]
-    end
+    E --> F[Request Queue]
+    F --> G[AI Processing]
+    G --> H[Result Storage]
     
-    subgraph "Response Handling"
-        Success[Success Response]
-        Error[Error Handling]
-        Retry[Retry Logic]
-    end
-    
-    Generate --> Validation
-    Validation --> Queue
-    Queue --> Processing
-    Processing --> Storage
-    
-    Storage --> Success
-    Processing --> Error
-    Error --> Retry
-    
-    Status --> Storage
-    Result --> Storage
+    H --> I[Success Response]
+    G --> J[Error Handling]
+    J --> K[Retry Logic]
 ```
 
 ## 🎯 AI Provider Strategy
 
 ```mermaid
 graph TD
-    subgraph "Provider Selection"
-        Request[AI Generation Request]
-        Strategy[Provider Strategy]
-        Primary[Primary: Pollinations]
-        Secondary[Secondary: Craiyon]
-        Tertiary[Tertiary: DeepAI]
-        Fallback[Fallback: Mock AI]
-    end
+    A[AI Request] --> B[Provider Strategy]
+    B --> C[Pollinations AI]
+    C --> D[Craiyon]
+    D --> E[DeepAI]
+    E --> F[Mock AI]
     
-    subgraph "Provider Features"
-        Free[100% FREE]
-        NoAPI[No API Keys]
-        Fast[Fast Response]
-        Quality[Good Quality]
-    end
-    
-    Request --> Strategy
-    Strategy --> Primary
-    Primary --> Secondary
-    Secondary --> Tertiary
-    Tertiary --> Fallback
-    
-    Primary --> Free
-    Primary --> NoAPI
-    Secondary --> Fast
-    Tertiary --> Quality
-    Fallback --> Free
+    C --> G[100% FREE]
+    C --> H[No API Keys]
+    D --> I[Fast Response]
+    E --> J[Good Quality]
+    F --> K[Always Available]
 ```
 
 ## 📊 State Management
@@ -287,39 +183,18 @@ stateDiagram-v2
 ## 🔒 Security & Performance
 
 ```mermaid
-graph LR
-    subgraph "Security Measures"
-        CORS[CORS Protection]
-        Validation[Input Validation]
-        Sanitization[Data Sanitization]
-        RateLimit[Rate Limiting]
-    end
+graph TD
+    A[CORS Protection] --> B[Input Validation]
+    B --> C[Data Sanitization]
+    C --> D[Rate Limiting]
     
-    subgraph "Performance Optimizations"
-        Cache[Response Caching]
-        Queue[Request Queuing]
-        Compression[Image Compression]
-        Lazy[Lazy Loading]
-    end
+    E[Response Caching] --> F[Request Queuing]
+    F --> G[Image Compression]
+    G --> H[Lazy Loading]
     
-    subgraph "Error Handling"
-        Retry[Retry Logic]
-        Fallback[Fallback Providers]
-        Timeout[Request Timeouts]
-        Logging[Error Logging]
-    end
-    
-    CORS --> Validation
-    Validation --> Sanitization
-    Sanitization --> RateLimit
-    
-    Cache --> Queue
-    Queue --> Compression
-    Compression --> Lazy
-    
-    Retry --> Fallback
-    Fallback --> Timeout
-    Timeout --> Logging
+    I[Retry Logic] --> J[Fallback Providers]
+    J --> K[Request Timeouts]
+    K --> L[Error Logging]
 ```
 
 ## 📁 Project Structure
@@ -359,37 +234,18 @@ retro-ai-paint/
 ## 🚀 Deployment Architecture
 
 ```mermaid
-graph TB
-    subgraph "Development"
-        Dev[Local Development]
-        Frontend[Frontend: localhost:5173]
-        Backend[Backend: localhost:3001]
-    end
+graph TD
+    A[Local Development] --> B[Frontend: localhost:5173]
+    A --> C[Backend: localhost:3001]
     
-    subgraph "Production Options"
-        Vercel[Vercel Frontend]
-        Railway[Railway Backend]
-        Netlify[Netlify Frontend]
-        Heroku[Heroku Backend]
-    end
+    B --> D[Vercel Frontend]
+    B --> E[Netlify Frontend]
+    C --> F[Railway Backend]
+    C --> G[Heroku Backend]
     
-    subgraph "AI Services"
-        Pollinations[Pollinations.ai]
-        Craiyon[Craiyon.com]
-        DeepAI[DeepAI.org]
-    end
-    
-    Dev --> Frontend
-    Dev --> Backend
-    
-    Frontend --> Vercel
-    Frontend --> Netlify
-    Backend --> Railway
-    Backend --> Heroku
-    
-    Vercel --> Pollinations
-    Railway --> Craiyon
-    Netlify --> DeepAI
+    D --> H[Pollinations.ai]
+    F --> I[Craiyon.com]
+    E --> J[DeepAI.org]
 ```
 
 ## 🎯 Key Features

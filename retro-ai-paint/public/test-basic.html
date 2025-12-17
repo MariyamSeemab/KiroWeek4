@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-width: 400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-box">
+        <h1>🎨 Basic HTML Test</h1>
+        <p>If you can see this, the web server is working!</p>
+        <button onclick="alert('JavaScript is working!')">Test Button</button>
+        <p><strong>Server Status:</strong> ✅ Running</p>
+        <p><strong>Port:</strong> 5173</p>
+        <p><strong>Time:</strong> <span id="time"></span></p>
+    </div>
+    
+    <script>
+        document.getElementById('time').textContent = new Date().toLocaleTimeString();
+        console.log('✅ Basic HTML page loaded successfully');
+    </script>
+</body>
+</html>

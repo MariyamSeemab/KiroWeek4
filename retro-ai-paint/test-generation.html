@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test AI Generation</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; }
+        #result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+        #image { max-width: 500px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Test AI Generation</h1>
+    <button onclick="testGeneration()">Test AI Generation</button>
+    <button onclick="checkHealth()">Check Backend Health</button>
+    
+    <div id="result"></div>
+    <img id="image" style="display: none;" />
+    
+    <script>
+        async function checkHealth() {
+            const result = document.getElementById('result');
+            result.innerHTML = 'Checking backend health...';
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/health');
+                const data = await response.json();
+                result.innerHTML = `✅ Backend healthy: ${JSON.stringify(data)}`;
+            } catch (error) {
+                result.innerHTML = `❌ Backend error: ${error.message}`;
+            }
+        }
+        
+        async function testGeneration() {
+            const result = document.getElementById('result');
+            const image = document.getElementById('image');
+            
+            result.innerHTML = 'Starting AI generation test...';
+            
+            try {
+                // Create a simple test canvas
+                const canvas = document.createElement('canvas');
+                canvas.width = 100;
+                canvas.height = 100;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw a simple shape
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, 100, 100);
+                ctx.fillStyle = 'black';
+                ctx.fillRect(25, 25, 50, 50);
+                
+                // Convert to blob
+                const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+                
+                // Create FormData
+                const formData = new FormData();
+                formData.append('sketch', blob, 'test-sketch.png');
+                formData.append('prompt', 'a beautiful landscape');
+                formData.append('generationParams', JSON.stringify({
+                    strength: 0.8,
+                    steps: 20,
+                    guidance: 7.5
+                }));
+                
+                result.innerHTML = 'Sending generation request...';
+                
+                // Start generation
+                const response = await fetch('http://localhost:3001/api/ai/generate', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    const generationId = data.data.generationId;
+                    result.innerHTML = `Generation started! ID: ${generationId}<br>Polling for completion...`;
+                    
+                    // Poll for completion
+                    await pollForCompletion(generationId);
+                } else {
+                    result.innerHTML = `❌ Generation failed: ${data.error}`;
+                }
+                
+            } catch (error) {
+                result.innerHTML = `❌ Test failed: ${error.message}`;
+            }
+        }
+        
+        async function pollForCompletion(generationId) {
+            const result = document.getElementById('result');
+            const image = document.getElementById('image');
+            
+            let attempts = 0;
+            const maxAttempts = 30;
+            
+            const pollInterval = setInterval(async () => {
+                attempts++;
+                
+                try {
+                    const statusResponse = await fetch(`http://localhost:3001/api/ai/status/${generationId}`);
+                    const statusData = await statusResponse.json();
+                    
+                    result.innerHTML = `Polling attempt ${attempts}/${maxAttempts}...<br>Status: ${JSON.stringify(statusData, null, 2)}`;
+                    
+                    if (statusData.success) {
+                        const status = statusData.data.status;
+                        
+                        if (status === 'completed') {
+                            clearInterval(pollInterval);
+                            
+                            // Download result
+                            const imageResponse = await fetch(`http://localhost:3001/api/ai/result/${generationId}`);
+                            
+                            if (imageResponse.ok) {
+                                const imageBlob = await imageResponse.blob();
+                                const imageUrl = URL.createObjectURL(imageBlob);
+                                
+                                image.src = imageUrl;
+                                image.style.display = 'block';
+                                
+                                result.innerHTML = `✅ Generation completed!<br>Image size: ${imageBlob.size} bytes<br>Type: ${imageBlob.type}`;
+                            } else {
+                                result.innerHTML = `❌ Failed to download image: ${imageResponse.status}`;
+                            }
+                        } else if (status === 'failed') {
+                            clearInterval(pollInterval);
+                            result.innerHTML = `❌ Generation failed: ${statusData.data.error}`;
+                        }
+                    }
+                    
+                    if (attempts >= maxAttempts) {
+                        clearInterval(pollInterval);
+                        result.innerHTML = `❌ Polling timeout`;
+                    }
+                    
+                } catch (error) {
+                    clearInterval(pollInterval);
+                    result.innerHTML = `❌ Polling error: ${error.message}`;
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

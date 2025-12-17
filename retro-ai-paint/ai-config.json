@@ -1,0 +1,73 @@
+{
+  "defaultProvider": "huggingface-free",
+  "providers": {
+    "huggingface-free": {
+      "enabled": true,
+      "name": "Hugging Face (Free)",
+      "cost": 0,
+      "description": "Completely free, no API key needed. Good quality, 10 requests/minute.",
+      "models": [
+        "runwayml/stable-diffusion-v1-5",
+        "hakurei/waifu-diffusion",
+        "stabilityai/stable-diffusion-2-1",
+        "nitrosocke/Arcane-Diffusion"
+      ],
+      "defaultModel": "runwayml/stable-diffusion-v1-5"
+    },
+    "local-ai": {
+      "enabled": false,
+      "name": "Local AI (Offline)",
+      "cost": 0,
+      "description": "Run AI on your own machine. Unlimited, completely offline.",
+      "endpoint": "http://localhost:7860",
+      "setupInstructions": "Install Automatic1111 WebUI or ComfyUI"
+    },
+    "replicate": {
+      "enabled": false,
+      "name": "Replicate",
+      "cost": 0.002,
+      "description": "High quality, fast generation. Requires API key.",
+      "requiresApiKey": true
+    },
+    "openai": {
+      "enabled": false,
+      "name": "OpenAI DALL-E",
+      "cost": 0.04,
+      "description": "Highest quality, most expensive. Requires API key.",
+      "requiresApiKey": true
+    },
+    "gemini": {
+      "enabled": false,
+      "name": "Google Gemini",
+      "cost": 0.002,
+      "description": "Good quality, multimodal. Requires API key.",
+      "requiresApiKey": true
+    }
+  },
+  "recommendations": {
+    "beginners": "huggingface-free",
+    "powerUsers": "local-ai",
+    "production": "replicate",
+    "highestQuality": "openai"
+  },
+  "tips": {
+    "freeUsage": [
+      "Start with Hugging Face Free - no setup required",
+      "Be patient - free models may take 10-30 seconds",
+      "Try different models for different art styles",
+      "Use descriptive prompts for better results"
+    ],
+    "localSetup": [
+      "Install Automatic1111 for easiest local setup",
+      "Use GPU for faster generation",
+      "Download models from Hugging Face or Civitai",
+      "Enable API mode with --api flag"
+    ],
+    "promptTips": [
+      "Be specific: 'photorealistic portrait' vs 'person'",
+      "Add style keywords: 'digital art', 'oil painting', 'anime'",
+      "Mention lighting: 'soft lighting', 'dramatic shadows'",
+      "Include quality terms: 'high quality', 'detailed', 'masterpiece'"
+    ]
+  }
+}

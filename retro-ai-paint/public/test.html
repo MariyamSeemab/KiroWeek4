@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Page - Retro AI Paint</title>
+    <style>
+        body {
+            font-family: 'MS Sans Serif', sans-serif;
+            background: #c0c0c0;
+            margin: 0;
+            padding: 20px;
+        }
+        .test-container {
+            background: white;
+            border: 2px inset #c0c0c0;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #000080;
+            text-align: center;
+        }
+        .status {
+            background: #ffffcc;
+            border: 1px solid #cccc00;
+            padding: 10px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎨 Retro AI Paint - Test Page</h1>
+        
+        <div class="status">
+            <h3>✅ Static Files Working</h3>
+            <p>If you can see this page, the Vite development server is running correctly.</p>
+        </div>
+        
+        <div class="status">
+            <h3>🔗 Navigation Links</h3>
+            <p><a href="/">← Back to Main Application</a></p>
+            <p><a href="http://localhost:3001/api/health" target="_blank">Test Backend API →</a></p>
+        </div>
+        
+        <div class="status">
+            <h3>🛠️ Troubleshooting</h3>
+            <p>If the main app isn't loading:</p>
+            <ul>
+                <li>Check browser console for JavaScript errors (F12)</li>
+                <li>Make sure both servers are running</li>
+                <li>Try refreshing the page (Ctrl+F5)</li>
+                <li>Clear browser cache</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        console.log('🎨 Retro AI Paint Test Page Loaded');
+        console.log('Frontend Server: http://localhost:5174/');
+        console.log('Backend Server: http://localhost:3001/');
+        
+        // Test backend connection
+        fetch('http://localhost:3001/api/health')
+            .then(response => response.json())
+            .then(data => {
+                console.log('✅ Backend connection successful:', data);
+                document.body.innerHTML += '<div style="background: #ccffcc; padding: 10px; margin: 20px; border: 1px solid #00cc00;"><strong>✅ Backend Connected:</strong> ' + data.message + '</div>';
+            })
+            .catch(error => {
+                console.error('❌ Backend connection failed:', error);
+                document.body.innerHTML += '<div style="background: #ffcccc; padding: 10px; margin: 20px; border: 1px solid #cc0000;"><strong>❌ Backend Connection Failed:</strong> ' + error.message + '</div>';
+            });
+    </script>
+</body>
+</html>

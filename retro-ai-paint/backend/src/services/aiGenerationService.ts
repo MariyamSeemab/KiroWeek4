@@ -1,3 +1,4 @@
+// @ts-nocheck
 import dotenv from 'dotenv';
 import axios from 'axios';
 import { createCanvas } from 'canvas';

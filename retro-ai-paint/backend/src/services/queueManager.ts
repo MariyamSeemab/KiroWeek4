@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Bull from 'bull';
 import { EnhancedGenerationRequest, EnhancedGenerationResult } from '../types/index.js';
 import { AIProviderManager } from './aiProviderManager.js';

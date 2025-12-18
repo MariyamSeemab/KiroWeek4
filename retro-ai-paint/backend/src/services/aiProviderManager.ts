@@ -367,12 +367,17 @@ export class AIProviderManager {
   }
 
   private async tryPicSoAI(request: EnhancedGenerationRequest): Promise<EnhancedGenerationResult | null> {
-    // Try Pollinations AI with different parameters
-    const prompt = encodeURIComponent(request.prompt);
+    // Try Pollinations AI with sketch-based generation
+    console.log('🎨 Trying Pollinations AI with sketch input...');
+    
+    // Create enhanced prompt that describes the sketch
+    const sketchPrompt = this.analyzeSketchForPrompt(request.sketchData);
+    const fullPrompt = `${sketchPrompt}, ${request.prompt}`;
+    const encodedPrompt = encodeURIComponent(fullPrompt);
     const seed = Math.floor(Math.random() * 1000000);
-    const apiUrl = `https://pollinations.ai/p/${prompt}?width=512&height=512&seed=${seed}`;
+    const apiUrl = `https://pollinations.ai/p/${encodedPrompt}?width=512&height=512&seed=${seed}&enhance=true`;
 
-    console.log('🎨 Trying Pollinations AI (alternative endpoint)...');
+    console.log('📤 Enhanced prompt:', fullPrompt);
     console.log('📤 URL:', apiUrl);
     
     const response = await fetch(apiUrl, {
@@ -407,7 +412,12 @@ export class AIProviderManager {
           metadata: {
             provider: 'pollinations-ai',
             model: 'stable-diffusion',
-            actualParameters: { prompt: request.prompt, seed },
+            actualParameters: { 
+              originalPrompt: request.prompt,
+              enhancedPrompt: fullPrompt,
+              sketchAnalysis: sketchPrompt,
+              seed 
+            },
             processingTime: 0,
             cost: 0,
             cacheHit: false
@@ -921,6 +931,46 @@ export class AIProviderManager {
     if (!provider) return 0;
 
     return provider.pricing.costPerGeneration;
+  }
+
+  private analyzeSketchForPrompt(sketchData: any): string {
+    // Analyze the sketch data to create descriptive prompts
+    // This is a simplified analysis - in a real implementation, you'd use computer vision
+    
+    try {
+      // Extract basic information from the sketch
+      const width = sketchData.width || 512;
+      const height = sketchData.height || 512;
+      
+      // Analyze aspect ratio
+      const aspectRatio = width / height;
+      let compositionHint = '';
+      
+      if (aspectRatio > 1.5) {
+        compositionHint = 'wide landscape composition';
+      } else if (aspectRatio < 0.7) {
+        compositionHint = 'tall portrait composition';
+      } else {
+        compositionHint = 'square balanced composition';
+      }
+      
+      // Basic sketch analysis (this could be enhanced with actual image processing)
+      const sketchPrompts = [
+        'hand-drawn sketch style',
+        'artistic drawing',
+        'creative illustration',
+        'detailed artwork',
+        'expressive line art'
+      ];
+      
+      const randomSketchStyle = sketchPrompts[Math.floor(Math.random() * sketchPrompts.length)];
+      
+      return `${randomSketchStyle}, ${compositionHint}`;
+      
+    } catch (error) {
+      console.warn('⚠️ Sketch analysis failed, using default:', error);
+      return 'artistic sketch, creative drawing';
+    }
   }
 
   public selectBestProvider(requirements: {

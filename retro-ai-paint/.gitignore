@@ -50,3 +50,13 @@ coverage
 *.tmp
 *.temp
 .cache
+
+# Test files (organized in tests/ directory)
+test-*.js
+test-*.html
+*-test.js
+
+# Development files
+setup-*.js
+check-*.js
+ai-config.json

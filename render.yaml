@@ -12,7 +12,22 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3001
+        fromService:
+          type: web
+          name: retro-ai-paint-backend
+          property: port
+      - key: AI_MOCK_MODE
+        value: false
+      - key: DEFAULT_AI_PROVIDER
+        value: huggingface-free
+      - key: HF_FREE_MODEL
+        value: runwayml/stable-diffusion-v1-5
+      - key: MAX_CONCURRENT_GENERATIONS
+        value: 5
+      - key: CACHE_EXPIRATION_HOURS
+        value: 24
+      - key: REQUEST_TIMEOUT_MS
+        value: 300000
       - key: FRONTEND_URL
         sync: false
       - key: CORS_ORIGIN

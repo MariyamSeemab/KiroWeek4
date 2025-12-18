@@ -18,18 +18,29 @@ const wss = new WebSocketServer({ server });
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:3000',
+  'https://kiroweek4.vercel.app',
+  'https://kiroweek4-1jrtimage-mariyam-s-projects.vercel.app',
+  'https://kiroweek4-git-main-mariyam-s-projects.vercel.app',
   process.env.FRONTEND_URL,
   process.env.CORS_ORIGIN
 ].filter(Boolean);
 
+console.log('🔧 CORS allowed origins:', allowedOrigins);
+
 app.use(cors({
   origin: (origin, callback) => {
+    console.log('🌐 Request from origin:', origin);
+    
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV === 'development') {
+    // Check if origin is in allowed list or if it's a vercel.app domain
+    if (allowedOrigins.indexOf(origin) !== -1 || 
+        origin.includes('vercel.app') || 
+        process.env.NODE_ENV === 'development') {
       callback(null, true);
     } else {
+      console.log('❌ CORS blocked origin:', origin);
       callback(new Error('Not allowed by CORS'));
     }
   },

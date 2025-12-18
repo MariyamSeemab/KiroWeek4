@@ -3,7 +3,14 @@ import './styles/retro.css';
 import { API_CONFIG } from './config/api';
 
 // API Base URL from environment variable or fallback to localhost
-const API_BASE_URL = API_CONFIG.BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://retro-ai-paint-backend-production.up.railway.app';
+
+console.log('🔧 API_BASE_URL:', API_BASE_URL);
+console.log('🔧 Environment variables:', {
+  VITE_API_URL: import.meta.env.VITE_API_URL,
+  MODE: import.meta.env.MODE,
+  PROD: import.meta.env.PROD
+});
 
 function App() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -63,17 +70,24 @@ function App() {
 
   const checkBackendConnection = async () => {
     try {
+      console.log('🔍 Checking backend connection to:', `${API_BASE_URL}/api/health`);
       const response = await fetch(`${API_BASE_URL}/api/health`);
+      console.log('📡 Response status:', response.status);
+      
       if (response.ok) {
+        const data = await response.json();
+        console.log('✅ Backend connected:', data);
         setBackendConnected(true);
-        console.log('✅ Backend connected');
         
         // Load available providers
         await loadProviders();
+      } else {
+        console.log('❌ Backend response not ok:', response.status, response.statusText);
+        setBackendConnected(false);
       }
     } catch (error) {
+      console.error('❌ Backend connection error:', error);
       setBackendConnected(false);
-      console.log('❌ Backend not available');
     }
   };
 

@@ -5,7 +5,7 @@ services:
     runtime: node
     region: oregon
     plan: free
-    rootDir: retro-ai-paint/backend
+    rootDir: backend
     buildCommand: npm ci && npm run build
     startCommand: npm start
     envVars:

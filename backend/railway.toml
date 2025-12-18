@@ -1,5 +1,7 @@
 [build]
 builder = "NIXPACKS"
+buildCommand = "npm ci && npm run build"
+watchPatterns = ["backend/**"]
 
 [build.nixpacksConfig]
 packages = ["python3", "cairo", "pango", "libjpeg", "giflib", "librsvg"]
@@ -13,3 +15,10 @@ restartPolicyMaxRetries = 10
 
 [variables]
 NODE_ENV = "production"
+PORT = "$PORT"
+AI_MOCK_MODE = "false"
+DEFAULT_AI_PROVIDER = "huggingface-free"
+HF_FREE_MODEL = "runwayml/stable-diffusion-v1-5"
+MAX_CONCURRENT_GENERATIONS = "5"
+CACHE_EXPIRATION_HOURS = "24"
+REQUEST_TIMEOUT_MS = "300000"

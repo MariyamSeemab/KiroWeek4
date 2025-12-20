@@ -2,8 +2,6 @@
 
 A nostalgic MS Paint-style drawing application with cutting-edge AI image generation capabilities. Draw your sketches and watch AI bring them to life!
 
-![Retro AI Paint Demo](https://via.placeholder.com/800x400/FF6B6B/FFFFFF?text=Retro+AI+Paint+Demo)
-
 ## ✨ Features
 
 ### 🎨 Classic Drawing Experience
@@ -233,3 +231,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ---
 
 **Ready to paint with AI?** 🎨✨ [Try it live](https://your-deployed-app.vercel.app) or [run locally](#quick-start)!
+
